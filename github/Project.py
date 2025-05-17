@@ -54,7 +54,7 @@ from typing import Any
 import github.GithubObject
 import github.NamedUser
 import github.Organization
-import github.ProjectColumn
+import github.Repository
 from github import Consts
 from github.GithubObject import Attribute, CompletableGithubObject, GraphQlObject, NotSet, Opt
 from github.PaginatedList import PaginatedList
