@@ -26,6 +26,7 @@
 # Copyright 2024 Enrico Minack <github@enrico.minack.dev>                      #
 # Copyright 2024 Jirka Borovec <6035284+Borda@users.noreply.github.com>        #
 # Copyright 2025 Enrico Minack <github@enrico.minack.dev>                      #
+# Copyright 2025 Alexis Belmonte <alexbelm48@gmail.com>                        #
 #                                                                              #
 # This file is part of PyGithub.                                               #
 # http://pygithub.readthedocs.io/                                              #
@@ -55,116 +56,148 @@ import github.NamedUser
 import github.Organization
 import github.ProjectColumn
 from github import Consts
-from github.GithubObject import Attribute, CompletableGithubObject, NotSet, Opt
+from github.GithubObject import Attribute, CompletableGithubObject, GraphQlObject, NotSet, Opt
 from github.PaginatedList import PaginatedList
 
 
-class Project(CompletableGithubObject):
+class Project(CompletableGithubObject, GraphQlObject):
     """
-    This class represents Projects.
+    This class represents GraphQL-based Project V2.
 
     The reference can be found here
-    https://docs.github.com/en/rest/reference/projects
+    https://docs.github.com/en/issues/planning-and-tracking-with-projects/automating-your-project/using-the-api-to-manage-projects
 
     The OpenAPI schema can be found at
-    - /components/schemas/project
+    - /components/schemas/projects-v2
 
     """
 
     def _initAttributes(self) -> None:
-        self._body: Attribute[str] = NotSet
-        self._columns_url: Attribute[str] = NotSet
-        self._created_at: Attribute[datetime] = NotSet
+        self._closed: Attribute[bool] = NotSet
+        self._closedAt: Attribute[datetime] = NotSet
+        self._createdAt: Attribute[datetime] = NotSet
         self._creator: Attribute[github.NamedUser.NamedUser] = NotSet
-        self._html_url: Attribute[str] = NotSet
-        self._id: Attribute[int] = NotSet
-        self._name: Attribute[str] = NotSet
-        self._node_id: Attribute[str] = NotSet
+        self._fields: Attribute[PaginatedList[github.ProjectFieldConfiguration.ProjectFieldConfiguration]] = NotSet
+        self._fullDatabaseId: Attribute[str] = NotSet
+        self._items: Attribute[PaginatedList[github.ProjectItemConnection.ProjectItemConnection]] = NotSet
         self._number: Attribute[int] = NotSet
-        self._organization_permission: Attribute[str] = NotSet
-        self._owner_url: Attribute[str] = NotSet
-        self._private: Attribute[bool] = NotSet
-        self._state: Attribute[str] = NotSet
-        self._updated_at: Attribute[datetime] = NotSet
+        self._owner: Attribute[github.NamedUser.NamedUser] = NotSet
+        self._public: Attribute[bool] = NotSet
+        self._readme: Attribute[str] = NotSet
+        self._repositories: Attribute[PaginatedList[github.Repository.Repository]] = NotSet
+        self._resourcePath: Attribute[str] = NotSet
+        self._shortDescription: Attribute[str] = NotSet
+        self._statusUpdates: Attribute[PaginatedList[github.ProjectStatusUpdate.ProjectStatusUpdate]] = NotSet
+        self._teams: Attribute[PaginatedList[github.Team.Team]] = NotSet
+        self._template: Attribute[bool] = NotSet
+        self._title: Attribute[str] = NotSet
+        self._updatedAt: Attribute[datetime] = NotSet
         self._url: Attribute[str] = NotSet
-
-    def __repr__(self) -> str:
-        return self.get__repr__({"name": self._name.value})
-
-    @property
-    def body(self) -> str:
-        self._completeIfNotSet(self._body)
-        return self._body.value
+        self._viewerCanReopen: Attribute[bool] = NotSet
+        self._viewerCanClose: Attribute[bool] = NotSet
+        self._viewerCanUpdate: Attribute[bool] = NotSet
+        self._views: Attribute[PaginatedList[github.ProjectView.ProjectView]] = NotSet
+        self._workflows: Attribute[github.ProjectWorkflow.ProjectWorkflows] = NotSet
 
     @property
-    def columns_url(self) -> str:
-        self._completeIfNotSet(self._columns_url)
-        return self._columns_url.value
+    def closed(self) -> bool:
+        return self._closed.value
 
     @property
-    def created_at(self) -> datetime:
-        self._completeIfNotSet(self._created_at)
-        return self._created_at.value
+    def closedAt(self) -> datetime:
+        return self._closedAt.value
+
+    @property
+    def createdAt(self) -> datetime:
+        return self._createdAt.value
 
     @property
     def creator(self) -> github.NamedUser.NamedUser:
-        self._completeIfNotSet(self._creator)
         return self._creator.value
 
     @property
-    def html_url(self) -> str:
-        self._completeIfNotSet(self._html_url)
-        return self._html_url.value
+    def fields(self) -> PaginatedList[github.ProjectFieldConfiguration.ProjectFieldConfiguration]:
+        return self._fields.value
 
     @property
-    def id(self) -> int:
-        self._completeIfNotSet(self._id)
-        return self._id.value
+    def fullDatabaseId(self) -> str:
+        return self._fullDatabaseId.value
 
     @property
-    def name(self) -> str:
-        self._completeIfNotSet(self._name)
-        return self._name.value
-
-    @property
-    def node_id(self) -> str:
-        self._completeIfNotSet(self._node_id)
-        return self._node_id.value
+    def items(self) -> PaginatedList[github.ProjectItemConnection.ProjectItemConnection]:
+        return self._items.value
 
     @property
     def number(self) -> int:
-        self._completeIfNotSet(self._number)
         return self._number.value
 
     @property
-    def organization_permission(self) -> str:
-        self._completeIfNotSet(self._organization_permission)
-        return self._organization_permission.value
+    def owner(self) -> github.NamedUser.NamedUser:
+        return self._owner.value
 
     @property
-    def owner_url(self) -> str:
-        self._completeIfNotSet(self._owner_url)
-        return self._owner_url.value
+    def public(self) -> bool:
+        return self._public.value
 
     @property
-    def private(self) -> bool:
-        self._completeIfNotSet(self._private)
-        return self._private.value
+    def readme(self) -> str:
+        return self._readme.value
 
     @property
-    def state(self) -> str:
-        self._completeIfNotSet(self._state)
-        return self._state.value
+    def repositories(self) -> PaginatedList[github.Repository.Repository]:
+        return self._repositories.value
 
     @property
-    def updated_at(self) -> datetime:
-        self._completeIfNotSet(self._updated_at)
-        return self._updated_at.value
+    def resourcePath(self) -> str:
+        return self._resourcePath.value
+
+    @property
+    def shortDescription(self) -> str:
+        return self._shortDescription.value
+
+    @property
+    def statusUpdates(self) -> PaginatedList[github.ProjectStatusUpdate.ProjectStatusUpdate]:
+        return self._statusUpdates.value
+
+    @property
+    def teams(self) -> PaginatedList[github.Team.Team]:
+        return self._teams.value
+
+    @property
+    def template(self) -> bool:
+        return self._template.value
+
+    @property
+    def title(self) -> str:
+        return self._title.value
+
+    @property
+    def updatedAt(self) -> datetime:
+        return self._updatedAt.value
 
     @property
     def url(self) -> str:
-        self._completeIfNotSet(self._url)
         return self._url.value
+
+    @property
+    def viewerCanReopen(self) -> bool:
+        return self._viewerCanReopen.value
+
+    @property
+    def viewerCanClose(self) -> bool:
+        return self._viewerCanClose.value
+
+    @property
+    def viewerCanUpdate(self) -> bool:
+        return self._viewerCanUpdate.value
+
+    @property
+    def views(self) -> PaginatedList[github.ProjectView.ProjectView]:
+        return self._views.value
+
+    @property
+    def workflows(self) -> github.ProjectWorkflow.ProjectWorkflows:
+        return self._workflows.value
 
     def delete(self) -> None:
         """
