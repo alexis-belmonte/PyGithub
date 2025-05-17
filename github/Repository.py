@@ -1731,7 +1731,6 @@ class Repository(CompletableGithubObject):
         :calls: `POST /graphql <https://docs.github.com/en/graphql/reference/mutations>`_ with a mutation to create a project
         <https://docs.github.com/en/graphql/reference/mutations#createprojectv2>
         :param name: string
-        :param readme: string
         :rtype: :class:`github.Project.Project`
         """
         assert isinstance(name, str), name
