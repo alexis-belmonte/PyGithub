@@ -42,6 +42,7 @@
 # Copyright 2024 Enrico Minack <github@enrico.minack.dev>                      #
 # Copyright 2024 Jirka Borovec <6035284+Borda@users.noreply.github.com>        #
 # Copyright 2025 Enrico Minack <github@enrico.minack.dev>                      #
+# Copyright 2025 Alexis Belmonte <alexbelm48@gmail.com>                        #
 #                                                                              #
 # This file is part of PyGithub.                                               #
 # http://pygithub.readthedocs.io/                                              #
@@ -75,6 +76,7 @@ import github.PaginatedList
 import github.Permissions
 import github.Repository
 import github.TeamDiscussion
+import github.Project
 from github import Consts
 from github.GithubException import UnknownObjectException
 from github.GithubObject import Attribute, CompletableGithubObject, NotSet, Opt
@@ -87,6 +89,7 @@ if TYPE_CHECKING:
     from github.Permissions import Permissions
     from github.Repository import Repository
     from github.TeamDiscussion import TeamDiscussion
+    from github.Project import Project
 
 
 class Team(CompletableGithubObject):
@@ -353,6 +356,27 @@ class Team(CompletableGithubObject):
             input=put_parameters,
         )
         return status == 204
+
+    def create_project(self, name: str) -> Project:
+        """
+        :calls: `POST /graphql <https://docs.github.com/en/graphql/reference/mutations>`_ with a mutation to create a project
+        <https://docs.github.com/en/graphql/reference/mutations#createprojectv2>
+        :param name: string
+        :rtype: :class:`github.Project.Project`
+        """
+        assert isinstance(name, str), name
+        variables = {
+            "ownerId": self._identity,
+            "teamId": self._id,
+            "title": name
+        }
+        return self._requester.graphql_named_mutation_class(
+            mutation_name="createProjectV2",
+            mutation_input=NotSet.remove_unset_items(variables),
+            output_schema="createProjectV2 { projectV2 { id } }",
+            item="projectV2",
+            klass=github.Project.Project
+        )
 
     def delete(self) -> None:
         """
