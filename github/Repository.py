@@ -139,6 +139,7 @@
 # Copyright 2025 Enrico Minack <github@enrico.minack.dev>                      #
 # Copyright 2025 Mikhail f. Shiryaev <mr.felixoid@gmail.com>                   #
 # Copyright 2025 Tan An Nie <121005973+tanannie22@users.noreply.github.com>    #
+# Copyright 2025 Alexis Belmonte <alexbelm48@gmail.com>                        #
 #                                                                              #
 # This file is part of PyGithub.                                               #
 # http://pygithub.readthedocs.io/                                              #
@@ -1725,25 +1726,27 @@ class Repository(CompletableGithubObject):
         headers, data = self._requester.requestJsonAndCheck("POST", f"{self.url}/milestones", input=post_parameters)
         return github.Milestone.Milestone(self._requester, headers, data, completed=True)
 
-    def create_project(self, name: str, body: Opt[str] = NotSet) -> Project:
+    def create_project(self, name: str) -> Project:
         """
-        :calls: `POST /repos/{owner}/{repo}/projects <https://docs.github.com/en/rest/reference/projects#create-a-repository-project>`_
+        :calls: `POST /graphql <https://docs.github.com/en/graphql/reference/mutations>`_ with a mutation to create a project
+        <https://docs.github.com/en/graphql/reference/mutations#createprojectv2>
         :param name: string
-        :param body: string
+        :param readme: string
         :rtype: :class:`github.Project.Project`
         """
         assert isinstance(name, str), name
-        assert is_optional(body, str), body
-        post_parameters = {
-            "name": name,
+        variables = {
+            "ownerId": self._identity,
+            "repositoryId": self._id,
+            "title": name
         }
-        import_header = {"Accept": Consts.mediaTypeProjectsPreview}
-        if is_defined(body):
-            post_parameters["body"] = body
-        headers, data = self._requester.requestJsonAndCheck(
-            "POST", f"{self.url}/projects", headers=import_header, input=post_parameters
+        return self._requester.graphql_named_mutation_class(
+            mutation_name="createProjectV2",
+            mutation_input=NotSet.remove_unset_items(variables),
+            output_schema="createProjectV2 { projectV2 { id } }",
+            item="projectV2",
+            klass=github.Project.Project
         )
-        return github.Project.Project(self._requester, headers, data, completed=True)
 
     def create_pull(
         self,
