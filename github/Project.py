@@ -49,7 +49,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import github.GithubObject
 import github.NamedUser
@@ -58,6 +58,9 @@ import github.Repository
 from github import Consts
 from github.GithubObject import Attribute, CompletableGithubObject, GraphQlObject, NotSet, Opt
 from github.PaginatedList import PaginatedList
+
+if TYPE_CHECKING:
+    from github.NamedUser import NamedUser
 
 
 class Project(CompletableGithubObject, GraphQlObject):
@@ -74,42 +77,42 @@ class Project(CompletableGithubObject, GraphQlObject):
 
     def _initAttributes(self) -> None:
         self._closed: Attribute[bool] = NotSet
-        self._closedAt: Attribute[datetime] = NotSet
-        self._createdAt: Attribute[datetime] = NotSet
-        self._creator: Attribute[github.NamedUser.NamedUser] = NotSet
-        self._fields: Attribute[PaginatedList[github.ProjectFieldConfiguration.ProjectFieldConfiguration]] = NotSet
-        self._fullDatabaseId: Attribute[str] = NotSet
-        self._items: Attribute[PaginatedList[github.ProjectItemConnection.ProjectItemConnection]] = NotSet
+        self._closed_at: Attribute[datetime] = NotSet
+        self._created_at: Attribute[datetime] = NotSet
+        self._creator: Attribute[NamedUser] = NotSet
+        self._fields: Attribute[PaginatedList[ProjectFieldConfiguration]] = NotSet
+        self._full_database_id: Attribute[str] = NotSet
+        self._items: Attribute[PaginatedList[ProjectItemConnection]] = NotSet
         self._number: Attribute[int] = NotSet
-        self._owner: Attribute[github.NamedUser.NamedUser] = NotSet
+        self._owner: Attribute[NamedUser] = NotSet
         self._public: Attribute[bool] = NotSet
         self._readme: Attribute[str] = NotSet
-        self._repositories: Attribute[PaginatedList[github.Repository.Repository]] = NotSet
-        self._resourcePath: Attribute[str] = NotSet
-        self._shortDescription: Attribute[str] = NotSet
-        self._statusUpdates: Attribute[PaginatedList[github.ProjectStatusUpdate.ProjectStatusUpdate]] = NotSet
-        self._teams: Attribute[PaginatedList[github.Team.Team]] = NotSet
+        self._repositories: Attribute[PaginatedList[Repository]] = NotSet
+        self._resource_path: Attribute[str] = NotSet
+        self._short_description: Attribute[str] = NotSet
+        self._status_updates: Attribute[PaginatedList[ProjectStatusUpdate]] = NotSet
+        self._teams: Attribute[PaginatedList[Team]] = NotSet
         self._template: Attribute[bool] = NotSet
         self._title: Attribute[str] = NotSet
-        self._updatedAt: Attribute[datetime] = NotSet
+        self._updated_at: Attribute[datetime] = NotSet
         self._url: Attribute[str] = NotSet
-        self._viewerCanReopen: Attribute[bool] = NotSet
-        self._viewerCanClose: Attribute[bool] = NotSet
-        self._viewerCanUpdate: Attribute[bool] = NotSet
-        self._views: Attribute[PaginatedList[github.ProjectView.ProjectView]] = NotSet
-        self._workflows: Attribute[github.ProjectWorkflow.ProjectWorkflows] = NotSet
+        self._viewer_can_reopen: Attribute[bool] = NotSet
+        self._viewer_can_close: Attribute[bool] = NotSet
+        self._viewer_can_update: Attribute[bool] = NotSet
+        self._views: Attribute[PaginatedList[ProjectView]] = NotSet
+        self._workflows: Attribute[ProjectWorkflows] = NotSet
 
     @property
     def closed(self) -> bool:
         return self._closed.value
 
     @property
-    def closedAt(self) -> datetime:
-        return self._closedAt.value
+    def closed_at(self) -> datetime:
+        return self._closed_at.value
 
     @property
-    def createdAt(self) -> datetime:
-        return self._createdAt.value
+    def created_at(self) -> datetime:
+        return self._created_at.value
 
     @property
     def creator(self) -> github.NamedUser.NamedUser:
@@ -120,8 +123,8 @@ class Project(CompletableGithubObject, GraphQlObject):
         return self._fields.value
 
     @property
-    def fullDatabaseId(self) -> str:
-        return self._fullDatabaseId.value
+    def full_database_id(self) -> str:
+        return self._full_database_id.value
 
     @property
     def items(self) -> PaginatedList[github.ProjectItemConnection.ProjectItemConnection]:
@@ -148,16 +151,16 @@ class Project(CompletableGithubObject, GraphQlObject):
         return self._repositories.value
 
     @property
-    def resourcePath(self) -> str:
-        return self._resourcePath.value
+    def resource_path(self) -> str:
+        return self._resource_path.value
 
     @property
-    def shortDescription(self) -> str:
-        return self._shortDescription.value
+    def short_description(self) -> str:
+        return self._short_description.value
 
     @property
-    def statusUpdates(self) -> PaginatedList[github.ProjectStatusUpdate.ProjectStatusUpdate]:
-        return self._statusUpdates.value
+    def status_updates(self) -> PaginatedList[github.ProjectStatusUpdate.ProjectStatusUpdate]:
+        return self._status_updates.value
 
     @property
     def teams(self) -> PaginatedList[github.Team.Team]:
@@ -172,24 +175,24 @@ class Project(CompletableGithubObject, GraphQlObject):
         return self._title.value
 
     @property
-    def updatedAt(self) -> datetime:
-        return self._updatedAt.value
+    def updated_at(self) -> datetime:
+        return self._updated_at.value
 
     @property
     def url(self) -> str:
         return self._url.value
 
     @property
-    def viewerCanReopen(self) -> bool:
-        return self._viewerCanReopen.value
+    def viewer_can_reopen(self) -> bool:
+        return self._viewer_can_reopen.value
 
     @property
-    def viewerCanClose(self) -> bool:
-        return self._viewerCanClose.value
+    def viewer_can_close(self) -> bool:
+        return self._viewer_can_close.value
 
     @property
-    def viewerCanUpdate(self) -> bool:
-        return self._viewerCanUpdate.value
+    def viewer_can_update(self) -> bool:
+        return self._viewer_can_update.value
 
     @property
     def views(self) -> PaginatedList[github.ProjectView.ProjectView]:
@@ -201,10 +204,16 @@ class Project(CompletableGithubObject, GraphQlObject):
 
     def delete(self) -> None:
         """
-        :calls: `DELETE /projects/{project_id} <https://docs.github.com/en/rest/reference/projects#delete-a-project>`_
+        :calls: `POST /graphql <https://docs.github.com/en/graphql/reference/mutations>`_ with a mutation to delete a project
+        <https://docs.github.com/en/graphql/reference/mutations#deleteprojectv2>
         """
-        headers, data = self._requester.requestJsonAndCheck(
-            "DELETE", self.url, headers={"Accept": Consts.mediaTypeProjectsPreview}
+        variables = {
+            "projectId": self._id.value
+        }
+        self._requester.graphql_named_mutation(
+            mutation_name="deleteProjectV2",
+            mutation_input=variables,
+            output_schema="deleteProjectV2"
         )
 
     def edit(
