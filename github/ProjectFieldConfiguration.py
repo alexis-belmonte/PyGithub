@@ -33,13 +33,14 @@ if TYPE_CHECKING:
 
 class ProjectFieldConfiguration(NonCompletableGithubObject, GraphQlObject):
     """
-    This class represents the base ProjectFieldConfiguration from Project V2.
+    This class represents the base ProjectV2FieldConfiguration from Project V2.
 
     The reference can be found here:
     https://docs.github.com/en/graphql/reference/unions#projectv2fieldconfiguration
 
     The OpenAPI schema can be found at
     - /components/schemas/projects-v2
+
     """
 
     def _initAttributes(self) -> None:
