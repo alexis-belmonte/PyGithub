@@ -27,6 +27,7 @@ from github.GithubObject import NonCompletableGithubObject, GraphQlObject, Attri
 if TYPE_CHECKING:
     import datetime
 
+
 class ProjectIterationFieldIteration(NonCompletableGithubObject, GraphQlObject):
     """
     This class represents the ProjectV2IterationFieldIteration from Project V2.

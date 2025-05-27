@@ -28,6 +28,7 @@ from github.PaginatedList import PaginatedList
 if TYPE_CHECKING:
     from github.ProjectIterationFieldIteration import ProjectIterationFieldIteration
 
+
 class ProjectIterationFieldConfiguration(NonCompletableGithubObject, GraphQlObject):
     """
     This class represents the base ProjectV2FieldConfiguration from Project V2.

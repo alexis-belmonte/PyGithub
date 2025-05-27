@@ -27,6 +27,7 @@ from github.GithubObject import Attribute, NotSet
 from github.ProjectFieldConfiguration import ProjectFieldConfiguration
 from github.ProjectIterationFieldConfiguration import ProjectIterationFieldConfiguration
 
+
 class ProjectIterationField(ProjectFieldConfiguration):
     """
     This class represents the ProjectV2IterationField from Project V2.
@@ -44,6 +45,11 @@ class ProjectIterationField(ProjectFieldConfiguration):
 
         self._configuration: Attribute[ProjectIterationFieldConfiguration] = NotSet
 
+    def __repr__(self) -> str:
+        return self.get__repr__({
+            "configuration": self._configuration.value
+        })
+
     @property
     def configuration(self) -> ProjectIterationFieldConfiguration:
         return self._configuration.value
@@ -51,4 +57,7 @@ class ProjectIterationField(ProjectFieldConfiguration):
     def _useAttributes(self, attributes: dict[str, Any]) -> None:
         super()._useAttributes(attributes)
         if "configuration" in attributes:
-            self._configuration = self._makeClassAttribute(ProjectIterationFieldConfiguration, attributes["configuration"])
+            self._configuration = self._makeClassAttribute(
+                klass=ProjectIterationFieldConfiguration,
+                value=attributes["configuration"]
+            )
