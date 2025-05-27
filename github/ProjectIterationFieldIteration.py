@@ -20,20 +20,19 @@
 #                                                                              #
 ################################################################################
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from github.GithubObject import NonCompletableGithubObject, GraphQlObject, Attribute, NotSet
-from github.PaginatedList import PaginatedList
 
 if TYPE_CHECKING:
-    from github.ProjectIterationFieldIteration import ProjectIterationFieldIteration
+    import datetime
 
-class ProjectIterationFieldConfiguration(NonCompletableGithubObject, GraphQlObject):
+class ProjectIterationFieldIteration(NonCompletableGithubObject, GraphQlObject):
     """
-    This class represents the base ProjectV2FieldConfiguration from Project V2.
+    This class represents the ProjectV2IterationFieldIteration from Project V2.
 
     The reference can be found here:
-    https://docs.github.com/en/graphql/reference/objects#projectv2iterationfieldconfiguration
+    https://docs.github.com/en/graphql/reference/objects#projectv2iterationfielditeration
 
     The OpenAPI schema can be found at
     - /components/schemas/projects-v2
@@ -41,29 +40,45 @@ class ProjectIterationFieldConfiguration(NonCompletableGithubObject, GraphQlObje
     """
 
     def _initAttributes(self) -> None:
-        self._completed_iterations: Attribute[PaginatedList[ProjectIterationFieldIteration]] = NotSet
+        super()._initAttributes()
+
         self._duration: Attribute[int] = NotSet
-        self._iterations: Attribute[PaginatedList[ProjectIterationFieldIteration]] = NotSet
-        self._startDay: Attribute[int] = NotSet
+        self._start_date: Attribute[datetime.datetime] = NotSet
+        self._title: Attribute[str] = NotSet
+        self._title_html: Attribute[str] = NotSet
 
     def __repr__(self) -> str:
         return self.get__repr__({
             "duration": self._duration.value,
-            "startDay": self._startDay.value
+            "start_date": self._start_date.value,
+            "title": self._title.value,
+            "title_html": self._title_html.value
         })
-
-    @property
-    def completed_iterations(self) -> PaginatedList[ProjectIterationFieldIteration]:
-        return self._completed_iterations.value
 
     @property
     def duration(self) -> int:
         return self._duration.value
 
     @property
-    def iterations(self) -> PaginatedList[ProjectIterationFieldIteration]:
-        return self._iterations.value
+    def start_date(self) -> datetime.datetime:
+        return self._start_date.value
 
     @property
-    def start_day(self) -> int:
-        return self._startDay.value
+    def title(self) -> str:
+        return self._title.value
+
+    @property
+    def title_html(self) -> str:
+        return self._title_html.value
+
+    def _useAttributes(self, attributes: dict[str, Any]) -> None:
+        super()._useAttributes(attributes)
+
+        if "duration" in attributes:
+            self._duration = self._makeIntAttribute(attributes["duration"])
+        if "startDate" in attributes:
+            self._start_date = self._makeDatetimeAttribute(attributes["startDate"])
+        if "title" in attributes:
+            self._title = self._makeStringAttribute(attributes["title"])
+        if "titleHTML" in attributes:
+            self._title_html = self._makeStringAttribute(attributes["titleHTML"])
