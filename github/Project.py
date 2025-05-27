@@ -58,6 +58,7 @@ import github.Repository
 from github import Consts
 from github.GithubObject import Attribute, CompletableGithubObject, GraphQlObject, NotSet, Opt
 from github.PaginatedList import PaginatedList
+from github.ProjectFieldConfiguration import ProjectFieldConfiguration
 
 if TYPE_CHECKING:
     from github.NamedUser import NamedUser
