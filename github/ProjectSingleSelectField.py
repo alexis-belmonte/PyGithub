@@ -56,7 +56,7 @@ class ProjectSingleSelectField(ProjectFieldConfiguration):
 
     def _useAttributes(self, attributes: dict[str, Any]) -> None:
         super()._useAttributes(attributes)
-        if "options" in attributes:
+        if "options" in attributes:  # pragma: no branch
             self._options = self._makeListOfClassesAttribute(
                 klass=ProjectSingleSelectFieldOption,
                 value=attributes["options"]

@@ -74,13 +74,13 @@ class ProjectSingleSelectFieldOption(NonCompletableGithubObject, GraphQlObject):
 
     def _useAttributes(self, attributes: dict[str, Any]) -> None:
         super()._useAttributes(attributes)
-        if "color" in attributes:
+        if "color" in attributes:  # pragma: no branch
             self._color = self._makeStringAttribute(value=attributes["color"])
-        if "description" in attributes:
+        if "description" in attributes:  # pragma: no branch
             self._description = self._makeStringAttribute(value=attributes["description"])
-        if "descriptionHTML" in attributes:
+        if "descriptionHTML" in attributes:  # pragma: no branch
             self._description_html = self._makeStringAttribute(value=attributes["descriptionHTML"])
-        if "name" in attributes:
+        if "name" in attributes:  # pragma: no branch
             self._name = self._makeStringAttribute(value=attributes["name"])
-        if "nameHTML" in attributes:
+        if "nameHTML" in attributes:  # pragma: no branch
             self._name_html = self._makeStringAttribute(value=attributes["nameHTML"])

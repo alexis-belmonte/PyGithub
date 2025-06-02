@@ -54,11 +54,12 @@ from typing import TYPE_CHECKING, Any
 import github.GithubObject
 import github.NamedUser
 import github.Organization
-import github.Repository
+from github.Repository import Repository
 from github import Consts
 from github.GithubObject import Attribute, CompletableGithubObject, GraphQlObject, NotSet, Opt
 from github.PaginatedList import PaginatedList
 from github.ProjectFieldConfiguration import ProjectFieldConfiguration
+from github.ProjectItemConnection import ProjectItemConnection
 
 if TYPE_CHECKING:
     from github.NamedUser import NamedUser
@@ -120,7 +121,7 @@ class Project(CompletableGithubObject, GraphQlObject):
         return self._creator.value
 
     @property
-    def fields(self) -> PaginatedList[github.ProjectFieldConfiguration.ProjectFieldConfiguration]:
+    def fields(self) -> PaginatedList[ProjectFieldConfiguration]:
         return self._fields.value
 
     @property
@@ -128,7 +129,7 @@ class Project(CompletableGithubObject, GraphQlObject):
         return self._full_database_id.value
 
     @property
-    def items(self) -> PaginatedList[github.ProjectItemConnection.ProjectItemConnection]:
+    def items(self) -> PaginatedList[ProjectItemConnection]:
         return self._items.value
 
     @property
@@ -148,7 +149,7 @@ class Project(CompletableGithubObject, GraphQlObject):
         return self._readme.value
 
     @property
-    def repositories(self) -> PaginatedList[github.Repository.Repository]:
+    def repositories(self) -> PaginatedList[Repository]:
         return self._repositories.value
 
     @property
@@ -160,11 +161,11 @@ class Project(CompletableGithubObject, GraphQlObject):
         return self._short_description.value
 
     @property
-    def status_updates(self) -> PaginatedList[github.ProjectStatusUpdate.ProjectStatusUpdate]:
+    def status_updates(self) -> PaginatedList[ProjectStatusUpdate]:
         return self._status_updates.value
 
     @property
-    def teams(self) -> PaginatedList[github.Team.Team]:
+    def teams(self) -> PaginatedList[Team]:
         return self._teams.value
 
     @property
@@ -196,11 +197,11 @@ class Project(CompletableGithubObject, GraphQlObject):
         return self._viewer_can_update.value
 
     @property
-    def views(self) -> PaginatedList[github.ProjectView.ProjectView]:
+    def views(self) -> PaginatedList[ProjectView]:
         return self._views.value
 
     @property
-    def workflows(self) -> github.ProjectWorkflow.ProjectWorkflows:
+    def workflows(self) -> ProjectWorkflows:
         return self._workflows.value
 
     def delete(self) -> None:
@@ -251,20 +252,20 @@ class Project(CompletableGithubObject, GraphQlObject):
         )
         self._useAttributes(data)
 
-    def get_columns(self) -> PaginatedList[github.ProjectColumn.ProjectColumn]:
+    def get_columns(self) -> PaginatedList[ProjectColumn]:
         """
         :calls: `GET /projects/{project_id}/columns <https://docs.github.com/en/rest/reference/projects#list-project-columns>`_
         """
 
         return PaginatedList(
-            github.ProjectColumn.ProjectColumn,
+            ProjectColumn,
             self._requester,
             self.columns_url,
             None,
             headers={"Accept": Consts.mediaTypeProjectsPreview},
         )
 
-    def create_column(self, name: str) -> github.ProjectColumn.ProjectColumn:
+    def create_column(self, name: str) -> ProjectColumn:
         """
         calls: `POST /projects/{project_id}/columns <https://docs.github.com/en/rest/reference/projects#create-a-project-column>`_
         """
@@ -274,7 +275,7 @@ class Project(CompletableGithubObject, GraphQlObject):
         headers, data = self._requester.requestJsonAndCheck(
             "POST", f"{self.url}/columns", headers=import_header, input=post_parameters
         )
-        return github.ProjectColumn.ProjectColumn(self._requester, headers, data)
+        return ProjectColumn(self._requester, headers, data)
 
     def _useAttributes(self, attributes: dict[str, Any]) -> None:
         if "body" in attributes:  # pragma no branch

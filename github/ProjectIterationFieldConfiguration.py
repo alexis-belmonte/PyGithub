@@ -20,10 +20,9 @@
 #                                                                              #
 ################################################################################
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from github.GithubObject import NonCompletableGithubObject, GraphQlObject, Attribute, NotSet
-from github.PaginatedList import PaginatedList
 
 if TYPE_CHECKING:
     from github.ProjectIterationFieldIteration import ProjectIterationFieldIteration
@@ -42,9 +41,9 @@ class ProjectIterationFieldConfiguration(NonCompletableGithubObject, GraphQlObje
     """
 
     def _initAttributes(self) -> None:
-        self._completed_iterations: Attribute[PaginatedList[ProjectIterationFieldIteration]] = NotSet
+        self._completed_iterations: Attribute[list[ProjectIterationFieldIteration]] = NotSet
         self._duration: Attribute[int] = NotSet
-        self._iterations: Attribute[PaginatedList[ProjectIterationFieldIteration]] = NotSet
+        self._iterations: Attribute[list[ProjectIterationFieldIteration]] = NotSet
         self._startDay: Attribute[int] = NotSet
 
     def __repr__(self) -> str:
@@ -54,7 +53,7 @@ class ProjectIterationFieldConfiguration(NonCompletableGithubObject, GraphQlObje
         })
 
     @property
-    def completed_iterations(self) -> PaginatedList[ProjectIterationFieldIteration]:
+    def completed_iterations(self) -> list[ProjectIterationFieldIteration]:
         return self._completed_iterations.value
 
     @property
@@ -62,9 +61,26 @@ class ProjectIterationFieldConfiguration(NonCompletableGithubObject, GraphQlObje
         return self._duration.value
 
     @property
-    def iterations(self) -> PaginatedList[ProjectIterationFieldIteration]:
+    def iterations(self) -> list[ProjectIterationFieldIteration]:
         return self._iterations.value
 
     @property
     def start_day(self) -> int:
         return self._startDay.value
+
+    def _useAttributes(self, attributes: dict[str, Any]) -> None:
+        super()._useAttributes(attributes)
+        if "completedIterations" in attributes:
+            self._completed_iterations = self._makeListOfClassesAttribute(
+                klass=ProjectIterationFieldIteration,
+                value=attributes["completedIterations"]
+            )
+        if "duration" in attributes:
+            self._duration = self._makeIntAttribute(attributes["duration"])
+        if "iterations" in attributes:
+            self._iterations = self._makeListOfClassesAttribute(
+                klass=ProjectIterationFieldIteration,
+                value=attributes["iterations"]
+            )
+        if "startDay" in attributes:
+            self._startDay = self._makeIntAttribute(attributes["startDay"])
