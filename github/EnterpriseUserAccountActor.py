@@ -31,7 +31,7 @@ from github.User import User
 from typing import Any
 
 
-class EnterpriseUserAccount(Actor):
+class EnterpriseUserAccountActor(Actor):
     """
     This class represents the EnterpriseUserAccount from Project V2.
 
@@ -44,7 +44,6 @@ class EnterpriseUserAccount(Actor):
 
     def _initAttributes(self) -> None:
         super()._initAttributes()
-
         self._enterprise: Attribute[Enterprise] = NotSet
         self._enterpriseInstallations: Attribute[EnterpriseServerInstallationMembershipConnection] = NotSet
         self._name: Attribute[str | None] = NotSet

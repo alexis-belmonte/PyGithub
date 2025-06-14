@@ -29,7 +29,7 @@ if TYPE_CHECKING:
     import datetime
 
 
-class Bot(Actor):
+class BotActor(Actor):
     """
     This class represents the Bot from Project V2.
 
